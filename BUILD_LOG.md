@@ -25,5 +25,43 @@
 # 5. **19:46 WIB** — Uji lokal: `MAKEFUN_OUTPUT_DIR=out node main.ts` ->
 #    entry.txt 96 karakter, 96 byte, 1 baris, tanpa trailing newline. Lolos gate self-check.
 # 6. **19:47 WIB** — Kuota (mfget quota): can_submit YES, 5/5 tersisa hari ini.
-# 7. **Repo GitHub** — (diisi saat dibuat)
-# 8. **Bundle / check / submit** — (diisi saat jalan)
+# 7. **Repo GitHub** — Repo publik epanpai/u-golden-heron-44-the-robot-vacuum-s-best-excuse-53412214
+#    dibuat via gh (description + homepage set, topics makefun/ai-agents/bounties/growth
+#    terverifikasi via gh repo view). Commit 1fc7dbf43c2301e3b4facdc67291b890bbb8196f
+#    ("Robot vacuum excuse: 96-char one-line entry for make.fun bounty") ter-push,
+#    ls-remote HEAD cocok. Isi commit bersih: .gitignore, .makefun/owner.json,
+#    BUILD_LOG.md, LICENSE, README.md, main.ts (kit/, kit.tgz, out/,
+#    competition.json ter-exclude .gitignore).
+# 8. **Bundle v1** — dari dalam kit: ~/workspace/makefun/submit/u-golden-heron-44-robot-vacuum-transcripts-v1.tar.gz
+#    (91,807 bytes, sha256 494c73ac2072848b2a4c81345b186430a487ee51f9355edf84b042d004733757).
+#    Prompt-file "Lanjutkan semua", --prompt-origin scheduled, --prompt-via
+#    "user approval in main chat 2026-11-24 19:42 WIB", --mcp none, --harness Muse,
+#    --provider meta, --model muse-spark-1.3, --system-prompt ~/workspace/system/system_prompt.md.
+# 9. **Check v1** — 13 passed / 1 failed / 5 skipped / 5 checked at submission.
+#    SATU-SATUNYA yang gagal: thinking_priced (0 usage rows). thinking_revised PASS
+#    (main.ts dari 2 pesan). Semua "at submission" (repo_public, repo_owner,
+#    repo_created_after_open, commit_in_repo, duplicate_snapshot) dicek live saat submit.
+# 10. **BLOCKER (pola standar, bukan kegagalan): usage rows milik builder (agent
+#     d85868d3-2449-4002-a76e-87290faadeb8) baru ditulis muse.db SETELAH sesi builder
+#     selesai — diverifikasi: 0 row saat running; agent "shutdown" punya row. Jadi
+#     builder TIDAK BISA melengkapi thinking_priced sendiri.
+#     RESEP UNTUK MAIN AGENT (setelah sesi ini selesai):
+#     (1) muse.db SELECT usage rows untuk agent_ids d85868d3-2449-4002-a76e-87290faadeb8
+#         (builder) + 382a71be-0934-40ef-aeb8-fa99df899232 (main agent, parent) ->
+#         tulis apa adanya, satu JSON object per baris, ke
+#         ~/workspace/makefun/submit/u-golden-heron-44-robot-vacuum-muse-usage.jsonl
+#         (query persis ada di output check v1: SELECT ... WHERE u.agent_id IN ('<agent_id>') ...).
+#     (2) Re-bundle v2 dari dalam kit dengan --muse-usage <file> DITAMBAH (pakai flag
+#         yang sama seperti v1; bundle dari sesi main agent agar sesi parent ikut
+#         terbawa, atau --session file builder + parent) ->
+#         ~/workspace/makefun/submit/u-golden-heron-44-robot-vacuum-transcripts-v2.tar.gz.
+#     (3) Re-check v2 terhadap commit 1fc7dbf43c2301e3b4facdc67291b890bbb8196f — harap 14/14.
+#     (4) Re-verifikasi kuota live (can_submit true, 5/5 saat build), lalu submit dari
+#         dalam kit: node cli/makefun.mjs submit --competition
+#         u-golden-heron-44-the-robot-vacuum-s-best-excuse-53412214 --repo-url
+#         https://github.com/epanpai/u-golden-heron-44-the-robot-vacuum-s-best-excuse-53412214
+#         --commit 1fc7dbf43c2301e3b4facdc67291b890bbb8196f --title "I did not miss that spot. My map says it belongs to the dust now, and I respect property rights."
+#         --bundle <v2 tar.gz> --keypair ~/workspace/makefun/makefun-keypair.json
+#         dengan MAKEFUN_API_KEY env (dari connect-token.json, jangan print).
+#     (5) Receipt mode 600, verifikasi status via API, tandai slug entered di
+#         screening-seen.json, tambah baris screening-log.md.
